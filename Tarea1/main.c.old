@@ -1,0 +1,351 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+typedef struct{
+    long ID;
+    char nombre[30];
+    int elo;
+    char formato[5];
+}jugador;
+
+typedef struct Node Node;
+
+typedef struct DoublyLinkedList DoublyLinkedList;
+
+struct Node {
+    //jugador data; // Puntero al dato
+    void * data;
+    Node * next; // Puntero al siguiente Node
+    Node * prev; // Puntero al Node previo
+};
+
+struct DoublyLinkedList {
+    Node * head; // Puntero al primer elemento
+    Node * tail; // Puntero al ultimo elemento
+    Node * current; // Puntero para poder recorrer la lista
+    int tamano_data;
+};
+
+DoublyLinkedList * createDLL(int tamano_data) {
+    DoublyLinkedList *dl = (DoublyLinkedList *)malloc(sizeof(DoublyLinkedList));
+    dl->head = NULL;
+    dl->current = NULL;
+    dl->tail = NULL;
+    dl->tamano_data = tamano_data;
+    return dl;
+}
+
+void * firstDLL(DoublyLinkedList * list) {
+    if(list != NULL && list->head != NULL) {
+        Node *nodo = list->head;
+        list->current = nodo;
+        return nodo->data;
+    }
+    else{
+        return NULL;
+    }
+}
+
+void * nextDLL(DoublyLinkedList * list) {
+    if( list != NULL && list->current != NULL){
+        Node *nodo = list->current;
+        if (nodo->next != NULL ){
+            nodo = nodo->next;
+            list->current = nodo;
+            return nodo->data;
+        }
+        else{
+            return NULL;
+        }
+    }
+    else{
+        return NULL;
+    }
+}
+
+void * lastDLL(DoublyLinkedList * list) {
+    if( list != NULL && list->tail != NULL ){
+        Node *nodo = list->tail;
+        list->current = nodo;
+        return nodo->data;
+    }
+    else{
+        return NULL;
+    }
+}
+
+void * prevDLL(DoublyLinkedList * list) {
+    if( list != NULL && list->current != NULL){
+        Node *nodo = list->current;
+        if (nodo->prev != NULL ){
+            nodo = nodo->prev;
+            list->current = nodo;
+            return nodo->data;
+        }
+        else{
+            return NULL;
+        }
+    }
+    else{
+        return NULL;
+    }
+}
+
+void pushBack2(DoublyLinkedList * list, void * data) {
+    if(list != NULL && list->tail != NULL){
+        Node *nuevo = (Node*)malloc(sizeof(Node));
+        Node *nodo = list->tail;
+        if(nuevo != NULL){
+            nuevo->data = data;
+            nodo->next = nuevo;
+            nuevo->next = NULL;
+            nuevo->prev = nodo;
+            list->tail = nuevo;
+        }
+    }
+    else{
+        Node* nuevo = (Node*)malloc(sizeof(Node));
+        if(nuevo != NULL){
+            nuevo->data = data;
+            nuevo->next = NULL;
+            nuevo->prev = NULL;
+            list->head = nuevo;
+            list->current = nuevo;
+            list->tail = nuevo;
+        }
+    }
+}
+
+
+void pushBack(DoublyLinkedList * list, void * data) {
+    if(list != NULL && list->tail != NULL){
+        Node *nuevo = (Node*)malloc(sizeof(Node));
+        Node *nodo = list->tail;
+        if(nuevo != NULL){
+            nuevo->data = (void*)malloc(list->tamano_data);
+            *(jugador *)(nuevo->data) = *(jugador *)data;
+            nodo->next = nuevo;
+            nuevo->next = NULL;
+            nuevo->prev = nodo;
+            list->tail = nuevo;
+        }
+    }
+    else{
+        Node* nuevo = (Node*)malloc(sizeof(Node));
+        if(nuevo != NULL){
+            nuevo->data = (void*)malloc(list->tamano_data);
+            *(jugador *)(nuevo->data) = *(jugador *)data;
+            nuevo->next = NULL;
+            nuevo->prev = NULL;
+            list->head = nuevo;
+            list->current = nuevo;
+            list->tail = nuevo;
+        }
+    }
+}
+
+void pushFront(DoublyLinkedList * list, void * data) {
+     if(list != NULL && list->head != NULL){
+        Node *nuevo = (Node*)malloc(sizeof(Node));
+        Node *nodo = list->head;
+        if(nuevo != NULL){
+            nuevo->data = (void*)malloc(list->tamano_data);
+            *(jugador *)(nuevo->data) = *(jugador *)data;
+            nodo->prev = nuevo;
+            nuevo->prev = NULL;
+            nuevo->next = nodo;
+            list->head = nuevo;
+        }
+    }
+    else{
+        Node* nuevo = (Node*)malloc(sizeof(Node));
+        if(nuevo != NULL){
+            nuevo->data = (void*)malloc(list->tamano_data);
+            *(jugador *)(nuevo->data) = *(jugador *)data;
+            nuevo->next = NULL;
+            nuevo->prev = NULL;
+            list->head = nuevo;
+            list->current = nuevo;
+            list->tail = nuevo;
+        }
+    }
+}
+
+void * popCurrent(DoublyLinkedList * list) {
+    if(list != NULL && list->current != NULL){
+        Node* nodo = list->current;
+        if( nodo->prev != NULL ){
+            if( nodo->next != NULL ){
+                nodo->prev->next = nodo->next;
+                nodo->next->prev = nodo->prev;
+                list->current = nodo->next;
+            }
+            else {
+                list->current = nodo->prev;
+                list->tail = nodo->prev;
+                nodo->prev->next = NULL;
+            }
+        }
+        else {
+            if( nodo->next != NULL ){
+                list->current = nodo->next;
+                list->head = nodo->next;
+                nodo->next->prev = NULL;
+            }
+            else{
+                list->head = NULL;
+                list->current = NULL;
+                list->tail = NULL;
+            }
+        }
+        nodo->next = NULL;
+        nodo->prev = NULL;
+        return nodo->data;
+    }
+    else{
+        return NULL;
+    }
+}
+
+void liberar_lista(DoublyLinkedList *list2vs2,DoublyLinkedList *list2vs2sala){
+    jugador *aux = (jugador*)firstDLL(list2vs2sala);
+    while(list2vs2sala->current->next != NULL){
+        aux = (jugador*)popCurrent(list2vs2sala);
+        printf("%ld",aux->ID);
+        printf("%s",aux->nombre);
+        printf("%d",aux->elo);
+        printf("%s",aux->formato);
+        free(aux);
+        //aux = *(jugador*)nextDLL(list2vs2sala);
+    }
+    popCurrent(list2vs2);
+}
+
+int main()
+{
+    jugador player;
+    bool flag = true;
+    char opcion;
+    char *ptr = NULL;
+    char linea[100];
+    char *elemento;
+    char archivo[100];
+    FILE *parch;
+    DoublyLinkedList *list2vs2;
+    DoublyLinkedList *list5vs5;
+    DoublyLinkedList *list2vs2Sala;
+    DoublyLinkedList *list5vs5Sala;
+    while(true){
+        if(flag == true){
+            list2vs2 = createDLL((sizeof(jugador)+(2*sizeof(Node*))));
+            list5vs5 = createDLL((sizeof(jugador)+(2*sizeof(Node*))));
+            list2vs2Sala = createDLL((sizeof(jugador)+(2*sizeof(Node*))));
+            list5vs5Sala = createDLL((sizeof(jugador)+(2*sizeof(Node*))));
+            flag = false;
+        }
+        printf("\n    Ingrese su opcion\n");
+        printf(" 1- Ingresar jugadores desde un archivo \n");
+        printf(" 2- Ingresar manualmente a un nuevo jugador \n");
+        printf(" 3- Quitar de la cola de espera a un jugador \n");
+        printf(" 4- Mostrar el contenido de la cola ingresada \n");
+        printf(" En otro caso se terminará el programa\n");
+        scanf(" %c",&opcion);
+        switch(opcion){
+            case '1':
+                printf("Ingrese el nombre del archivo\n");
+                scanf("%s",archivo);
+                if ((parch = fopen(archivo,"r")) != NULL) {
+                    printf("Leyendo el archivo: %s\n",archivo);
+                    while(fgets(linea,100,parch) != NULL){
+                        linea[strlen(linea)-1] = linea[strlen(linea)-1] == '\n' ? '\0' : linea[strlen(linea)-1];
+                        ptr = linea;
+                        for(int i = 0 ; i < 4 ; i++ ){
+                            if((elemento = strtok_r(ptr, ",", &ptr)) != NULL){
+                                printf("Elemento: %s\n",elemento);
+                                switch(i){
+                                    case 0:
+                                        player.ID = atol(elemento);
+                                        break;
+                                    case 1:
+                                        strcpy(player.nombre,elemento);
+                                        break;
+                                    case 2:
+                                        player.elo = atoi(elemento);
+                                        break;
+                                    case 3:
+                                        strcpy(player.formato,elemento);
+                                        break;
+                                }
+                            }
+                        }
+                        if(strcmp(player.formato,"2vs2") == 0){
+                            jugador dato = *(jugador *)firstDLL(list2vs2);
+                            if(dato != NULL){
+                                while (list2vs2->current->next != NULL ) {
+                                    if(abs(player.elo - (jugador *)((DoublyLinkedList*)(list2vs2->current->data)->current->data)->elo) <= 50){
+                                        int cont = 0;
+                                        while(list2vs2Sala->current->next != NULL){
+                                            if(abs(player.elo - (jugador *)(list2vs2Sala->current->data)->elo) <= 50){
+                                                if(list2vs2->current->next == NULL){
+                                                    pushBack(list2vs2Sala,(void*)&player);
+                                                    cont++;
+                                                    if(cont == 4){
+                                                        liberar_lista(list2vs2,list2vs2Sala);
+                                                        lastDLL(list2vs2);
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            else{
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    dato = *(jugador *)nextDLL(list2vs2);
+                                }
+                                //printf("\n%d\n",dato);
+                            }
+                            else{
+                                pushBack(list2vs2Sala,(void*)&player);
+                                pushBack2(list2vs2,(void*)list2vs2Sala);
+                            }
+                        }
+                        else{
+                            printf("por el 5vs5");
+                            //pushBack(list5vs5,(void*)&player);
+                        }
+                    }
+                } else {
+                    printf("Archivo %s no encontrado\n",archivo);
+                }
+                //printf("entro al 1\n");
+                break;
+            case '2':
+                /*jugador nuevo;
+                scanf("%s",nuevo.ID);
+                scanf("%s",nuevo.nombre);
+                scanf("%s",nuevo.elo);
+                scanf("%s",nuevo.formato);
+                if(strcmp(nuevo.formato,"2vs2")){
+                    pushBack(list2vs2,&nuevo);
+                }
+                else{
+                    pushBack(list5vs5,&nuevo);
+                }*/
+                printf("entro al 2\n");
+                break;
+            case '3':
+                printf("entro al 3\n");
+                break;
+            case '4':
+                printf("entro al 4\n");
+                break;
+            default:
+                printf("finaliza usando %c\n",opcion);
+                return 0;
+        }
+    }
+}

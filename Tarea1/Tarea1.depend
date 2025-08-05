@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1587393525 source:/home/pablo/Tarea1/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+	<stdlib.h>
+	"libreria.h"
+
+1587392682 /home/pablo/Tarea1/libreria.h
+
