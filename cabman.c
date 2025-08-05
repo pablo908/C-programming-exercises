@@ -1,6 +1,5 @@
 /*
 	Nombre: Pablo Ignacio Pezoa Frau
-	RUT: 20.474.058-5
 	Asignatura: Sistemas Operativos
 */
 
