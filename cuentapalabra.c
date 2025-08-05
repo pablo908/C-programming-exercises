@@ -22,7 +22,6 @@ void mostrarPalabrasFrecuencia(FILE *entrada,FILE **salida){
 		while( flag == false && !feof(entrada) ){
 			memset(array[i].palabra,0,41);
 			fscanf(entrada,"%s",array[i].palabra);
-			//for( int j = 0 ; 1 ; j++ ){
 			for( int j = 0 ; j<strlen(array[i].palabra) ; j++ ){
 				if( isalpha(array[i].palabra[j]) != 0 ){
 					printf("si\n");
