@@ -1,0 +1,30 @@
+# depslib dependency file v1.0
+1595195690 source:/home/pablo/Tarea_3/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<assert.h>
+	"SortedMap.h"
+
+1595118375 /home/pablo/Tarea_3/SortedMap.c
+	"SortedMap.h"
+	<stdlib.h>
+	<assert.h>
+
+1595192995 /home/pablo/Tarea_3/SortedMap.h
+
+1595118375 source:/home/pablo/Tarea_3/SortedMap.c
+	"SortedMap.h"
+	<stdlib.h>
+	<assert.h>
+
+1595192301 source:/home/pablo/Tarea_3/Movie.c
+	"Movie.h"
+	<stdlib.h>
+	<assert.h>
+
+1595191635 /home/pablo/Tarea_3/Movie.h
+
+1595193552 /home/pablo/Tarea_3/Sources.h
+	<stdio.h>
+
